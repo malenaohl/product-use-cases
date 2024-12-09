@@ -1,0 +1,1699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>AI-Generated Product Use Cases</title>
+    <style>
+    :root {
+    --base-color: #f0f2f5;
+    --text-color: #333;
+    --shadow-light: #ffffff;
+    --shadow-dark: #d1d5db;
+    --transition-speed: 0.3s;
+    --card-width: min(450px, 100%);
+    --card-padding: clamp(1rem, 3vw, 2.5rem);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+body {
+    background: var(--base-color);
+    color: var(--text-color);
+    padding: 2rem;
+    min-height: 100vh;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding: 2rem;
+    border-radius: 16px;
+    background: white;
+    box-shadow: 
+        8px 8px 16px var(--shadow-dark),
+        -8px -8px 16px var(--shadow-light);
+}
+
+h1 {
+    color: #2d3748;
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+}
+      
+.company-section {
+    margin-bottom: 4rem;
+    width: 100%;
+}
+
+.company-header {
+    color: #2d3748;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--shadow-dark);
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+
+.search {
+    padding: 0.75rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    width: 300px;
+    background: white;
+    font-size: 1rem;
+    transition: border-color 0.2s ease;
+}
+
+.search:focus {
+    outline: none;
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+}
+
+.company-filter {
+    padding: 0.75rem 2.5rem 0.75rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    background: white;
+    font-size: 1rem;
+    color: #4a5568;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%234a5568' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1.25em;
+    transition: border-color 0.2s ease;
+}
+
+.company-filter:focus {
+    outline: none;
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+}
+
+.btn {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 10px;
+    background: white;
+    color: #4a5568;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 
+        5px 5px 10px var(--shadow-dark),
+        -5px -5px 10px var(--shadow-light);
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        7px 7px 14px var(--shadow-dark),
+        -7px -7px 14px var(--shadow-light);
+}
+
+#cardGrid {
+    display: flex;
+    flex-direction: column;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 4rem;
+}
+
+      .card-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+    grid-auto-flow: row; /* Forces items to flow row by row */
+}
+
+.card {
+    background: white;
+    border-radius: 20px;
+    padding: var(--card-padding);
+    width: 100%;
+    min-width: 280px;
+    min-height: 280px;
+    margin-bottom: 1rem;
+    box-shadow: 
+        8px 8px 16px var(--shadow-dark),
+        -8px -8px 16px var(--shadow-light);
+    transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    grid-row: auto; /* Ensures independent row placement */
+    height: fit-content; /* Allows card to size to content */
+    isolation: isolate; /* Creates stacking context */
+}
+
+.card h2 {
+    color: #2d3748;
+    margin-bottom: 2rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.card table {
+    margin-top: 1.3rem;
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+    position: relative;
+    transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Card States */
+.card:not(.expanded) tr:not(:first-child) {
+    display: none;
+}
+
+/* Table Styles */
+th:first-child {
+    width: 160px;
+    font-weight: 600;
+    transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+    word-wrap: break-word;
+    hyphens: auto;
+}
+
+/* Table Row Border Radius */
+.card table tr:first-child th {
+    border-radius: 8px 0 0 0;
+}
+
+.card table tr:first-child td {
+    border-radius: 0 8px 0 0;
+}
+
+.card table tr:last-child th {
+    border-radius: 0 0 0 8px;
+}
+
+.card table tr:last-child td {
+    border-radius: 0 0 8px 0;
+}
+
+/* Collapsed State Styles */
+.card:not(.expanded) tr:first-child td:last-child {
+    border-radius: 8px;
+    width: 100%;
+}
+
+.card:not(.expanded) tr:first-child th:first-child {
+    width: 0;
+    padding: 0;
+    opacity: 0;
+}
+
+/* Cell Styles */
+th, td {
+    padding: clamp(0.75rem, 2vw, 1.25rem);
+    text-align: left;
+    line-height: 1.6;
+    word-wrap: break-word;
+    transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Row Colors */
+tr:nth-child(1) th { background: #8896b3; color: white; }
+tr:nth-child(1) td { background: #f5f6f9; }
+
+tr:nth-child(2) th { background: #a586d9; color: white; }
+tr:nth-child(2) td { background: #f7f5fb; }
+
+tr:nth-child(3) th { background: #9d93e7; color: white; }
+tr:nth-child(3) td { background: #f6f5fc; }
+
+tr:nth-child(4) th { background: #8f9ff2; color: white; }
+tr:nth-child(4) td { background: #f5f6fd; }
+
+tr:nth-child(5) th { background: #80acf9; color: white; }
+tr:nth-child(5) td { background: #f5f7fe; }
+
+tr:nth-child(6) th { background: #71b8ff; color: white; }
+tr:nth-child(6) td { background: #f4f8fe; }
+
+/* Bullet Lists */
+.bullet-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.bullet-list li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.bullet-list li:last-child {
+    margin-bottom: 0;
+}
+
+.bullet-list li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #718096;
+}
+
+/* Hover Effects */
+.card:not(.expanded):hover {
+    transform: translateY(-4px);
+    box-shadow: 
+        12px 12px 20px var(--shadow-dark),
+        -12px -12px 20px var(--shadow-light);
+}
+
+/* Expand Indicator */
+.expand-indicator {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    transition: transform var(--transition-speed) ease;
+    color: #718096;
+    font-size: 1.5rem;
+}
+
+.card.expanded .expand-indicator {
+    transform: rotate(180deg);
+}
+
+/* Accessibility */
+.card:focus-visible {
+    outline: 3px solid #4299e1;
+    outline-offset: 2px;
+}
+
+.btn:focus, 
+.search:focus, 
+.card:focus {
+    outline: 2px solid #4a5568;
+}
+
+/* Responsive Design */
+@media (max-width: 968px) {
+      #cardGrid {
+        gap: 3rem;
+    }
+  
+    .card-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .card {
+        min-width: unset;
+        width: 100%;
+    }
+
+    .card h2 {
+        font-size: clamp(1.125rem, 4vw, 1.5rem);
+    }
+
+    th, td {
+        font-size: clamp(0.875rem, 3vw, 1rem);
+    }
+
+    .controls {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .search, 
+    .company-filter {
+        width: 100%;
+        max-width: 300px;
+    }
+  
+    .company-header {
+        font-size: 1.75rem;
+        margin-bottom: 1.5rem;
+    }
+  
+    .company-section {
+        margin-bottom: 3rem;
+    }
+
+    .search {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+  
+      #cardGrid {
+        gap: 2rem;
+    }
+  
+    body {
+        padding: 1rem;
+    }
+
+    .controls {
+        padding: 0 1rem;
+    }
+
+    .search {
+        width: 100%;
+    }
+
+    .card-grid {
+        gap: 1.5rem;
+    }
+}
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Product Use Cases</h1>
+        <div class="controls">
+            <input 
+            type="text" 
+            class="search" 
+            placeholder="Search use cases..." 
+            aria-label="Search cards by JTBD, Pain Points, etc."/>
+        <select 
+            class="company-filter" 
+            aria-label="Filter by company">
+            <option value="">All Companies</option>
+            <option value="10KC">10KC</option>
+            <option value="B-sharpe">b-sharpe</option>
+            <option value="Chime">Chime</option>
+            <option value="Clerk">Clerk</option>
+            <option value="DrumWave">DrumWave</option>
+            <option value="Hubspot (Messaging)">Hubspot (Messaging)   </option>
+            <option value="Microsoft Defender for Cloud Apps">Microsoft Defender for Cloud Apps</option>
+            <option value="Peppr">Peppr</option>
+            <option value="Procure">Procure</option>
+            <option value="Scribd">Scribd</option>
+            <option value="Sword Health">Sword Health</option>
+          </select>
+        </div>
+    </header>
+
+    <main class="card-grid" id="cardGrid" aria-live="polite"></main>
+
+    <script>
+// Card data structure
+// Company and card data structure
+const companyData = {
+    "10KC": [
+        {
+            title: "New Manager Development",
+            rows: [
+                { category: "JTBD", description: "When engineering ICs get promoted to management roles, we want to rapidly develop their leadership capabilities so we can maintain team performance during transitions." },
+                { category: "Pain Points", description: [
+                    "First-time managers often struggle for 6-12 months learning basic management skills",
+                    "Senior managers spend too much time doing 1:1 coaching with new managers",
+                    "Inconsistent management practices develop across different orgs"
+                ] },
+                { category: "Pain Relievers", description: [
+                    "Match new managers with experienced leaders outside their org",
+                    "Create peer cohorts of new managers to work through common scenarios",
+                    "Provide expert-backed curriculum focused on first-year challenges"
+                ] },
+                { category: "Value Propositions", description: [
+                    "Accelerate new manager effectiveness",
+                    "Scale leadership development without overburdening senior managers"
+                ] },
+                { category: "Product Transformation", description: [
+                    "Reduced new manager ramp time from 9 months to 3 months",
+                    "Created scalable knowledge sharing between 200+ engineering managers"
+                ] },
+                { category: "Performance Indicators", description: [
+                    "85% of new managers report feeling confident after 3 months",
+                    "3x increase in manager training participation"
+                ] }
+            ]
+        },
+        {
+            title: "Remote Employee Integration",
+            rows: [
+                { category: "JTBD", description: "When onboarding new hires in a distributed workforce, we want to build meaningful connections so we can maintain our collaborative culture." },
+                { category: "Pain Points", description: [
+                    "Remote employees take longer to build internal networks",
+                    "Difficult to replicate organic office interactions",
+                    "New hires struggle to find the right people across time zones"
+                ] },
+                { category: "Pain Relievers", description: [
+                    "Smart-match new hires with peers and leaders for coffee chats",
+                    "Create virtual onboarding cohorts that meet regularly",
+                    "Facilitate cross-timezone knowledge sharing sessions"
+                ] },
+                { category: "Value Propositions", description: [
+                    "Accelerate remote employee integration",
+                    "Scale culture across distributed teams"
+                ] },
+                { category: "Product Transformation", description: [
+                    "Built connections between 500+ remote employees in first 90 days",
+                    "Created sustainable remote onboarding program with minimal HR overhead"
+                ] },
+                { category: "Performance Indicators", description: [
+                    "92% of remote new hires felt connected after 3 months",
+                    "2x increase in cross-org collaboration"
+                ] }
+            ]
+        },
+        {
+            title: "Technical Mentorship at Scale",
+            rows: [
+                { category: "JTBD", description: "When trying to upskill thousands of engineers across different tech stacks, we want to connect them with internal experts so we can accelerate learning without external training costs." },
+                { category: "Pain Points", description: [
+                    "Hard to identify subject matter experts across large engineering org",
+                    "Senior engineers getting burnt out from constant mentoring requests",
+                    "Knowledge silos develop between teams"
+                ] },
+                { category: "Pain Relievers", description: [
+                    "Create office hours program matching engineers with experts",
+                    "Organize peer learning circles around specific technologies",
+                    "Build internal expert directory with scheduling and load balancing"
+                ] },
+                { category: "Value Propositions", description: [
+                    "Democratize access to technical expertise",
+                    "Reduce dependency on expensive external training"
+                ] },
+                { category: "Product Transformation", description: [
+                    "Created knowledge sharing program across 2000+ engineers",
+                    "Reduced reliance on external technical training by 60%"
+                ] },
+                { category: "Performance Indicators", description: [
+                    "78% of engineers learned new technical skill through peer mentorship",
+                    "4x increase in cross-team technical collaboration"
+                ] }
+            ]
+        }
+    ],
+      "b-sharpe": [
+        {
+            title: "Remote Work Payments",
+            rows: [
+                { category: "JTBD", description: "When hiring remote workers globally, we want to pay them in their local currency so we can expand our talent pool without massive fees." },
+                { category: "Pain Points", description: [
+                    "Traditional bank transfers eat up 3-5% in hidden fees and terrible exchange rates",
+                    "Finance teams waste hours manually processing international payments",
+                    "Worker satisfaction drops when they lose money on currency conversion"
+                ] },
+                { category: "Pain Relievers", description: [
+                    "One-click bulk payments to multiple currencies",
+                    "Real-time exchange rates with no hidden markups",
+                    "Automated payment scheduling and reconciliation"
+                ] },
+                { category: "Value Propositions", description: [
+                    "Pay global teams without the hassle",
+                    "Save thousands on international transfers"
+                ] },
+                { category: "Product Transformation", description: [
+                    "Company X reduced payment processing time from 2 days to 15 minutes",
+                    "Employees receive full value of their salary without exchange fees"
+                ] },
+                { category: "Performance Indicators", description: [
+                    "70% reduction in payment processing time",
+                    "Average savings of 864 CHF per year per payment flow"
+                ] }
+            ]
+        },
+        {
+            title: "Property Purchase",
+            rows: [
+                { category: "JTBD", description: "When buying property abroad, we want to transfer large sums securely so we can complete the purchase without stress about exchange rates or fraud." },
+                { category: "Pain Points", description: [
+                    "Banks charge premium rates for large international transfers",
+                    "Lack of transparency about when money will arrive",
+                    "Security concerns about large sum transfers"
+                ] },
+                { category: "Pain Relievers", description: [
+                    "Guaranteed exchange rates locked in advance",
+                    "Insurance up to 5M CHF on all transfers",
+                    "Real-time transfer tracking"
+                ] },
+                { category: "Value Propositions", description: [
+                    "Make your dream home purchase with confidence",
+                    "Save tens of thousands on property transfers"
+                ] },
+                { category: "Product Transformation", description: [
+                    "Client saved 15,000 EUR on a 500,000 EUR property purchase"
+                ] },
+                { category: "Performance Indicators", description: [
+                    "Average 3.2% savings vs bank rates on large transfers",
+                    "100% of transfers completed within 24 hours"
+                ] }
+            ]
+        },
+        {
+            title: "University Tuition",
+            rows: [
+                { category: "JTBD", description: "When students need to pay international tuition fees, we want seamless payments in the university's currency so we can avoid stress during enrollment." },
+                { category: "Pain Points", description: [
+                    "Students lose hundreds in bank fees paying tuition abroad",
+                    "Payment delays risk missing enrollment deadlines",
+                    "Parents worry about security of large transfers"
+                ] },
+                { category: "Pain Relievers", description: [
+                    "Lower fees than any Swiss bank for student transfers",
+                    "24-hour guaranteed transfer completion",
+                    "Full insurance coverage up to 5M CHF"
+                ] },
+                { category: "Value Propositions", description: [
+                    "Start your studies without the currency hassle",
+                    "Save enough for your textbooks"
+                ] },
+                { category: "Product Transformation", description: [
+                    "Student saved 500 EUR on 25,000 EUR annual tuition payment",
+                    "Universities receive exact expected amount without deductions"
+                ] },
+                { category: "Performance Indicators", description: [
+                    "92% of payments completed within 12 hours",
+                    "Average 650 CHF annual savings for recurring payments"
+                ] }
+            ]
+        },
+        {
+            title: "Small Business Import/Export",
+            rows: [
+                { category: "JTBD", description: "When small businesses trade internationally, we want to handle multiple currency payments so we can focus on growing our business." },
+                { category: "Pain Points", description: [
+                    "Unpredictable exchange rates make pricing difficult",
+                    "Managing multiple currency accounts is complex",
+                    "Cash flow issues from slow international payments"
+                ] },
+                { category: "Pain Relievers", description: [
+                    "Lock in exchange rates for future payments",
+                    "Single dashboard for all currency management",
+                    "Same-day transfer for major currencies"
+                ] },
+                { category: "Value Propositions", description: [
+                    "Run your global business from one place",
+                    "Never worry about exchange rates again"
+                ] },
+                { category: "Product Transformation", description: [
+                    "Local Swiss retailer expanded to 3 new EU markets",
+                    "Reduced currency management time from 5 hours to 30 minutes weekly"
+                ] },
+                { category: "Performance Indicators", description: [
+                    "75% reduction in currency management overhead",
+                    "Average 3,000 CHF annual savings for SMEs"
+                ] }
+            ]
+        }
+    ],
+    "Chime": [
+        {
+            title: "Paycheck Access",
+            rows: [
+                { category: "JTBD", description: "When I'm running low on funds before payday, I want early access to my wages so I can avoid expensive payday loans and overdraft fees." },
+                { category: "Pain Points", description: [
+                    "Living paycheck-to-paycheck means unexpected expenses can spiral into debt",
+                    "Traditional banks charge $35+ per overdraft, creating a cycle of fees",
+                    "Payday lenders charge 400%+ APR, trapping people in predatory debt"
+                ] },
+                { category: "Pain Relievers", description: [
+                    "Get up to $500 of paycheck early with no interest or mandatory fees",
+                    "Overdraft up to $200 with no fees through SpotMe",
+                    "Receive direct deposits up to 2 days early"
+                ]},
+                { category: "Value Propositions", description: [
+                    "Break free from predatory lending",
+                    "Never pay overdraft fees again"
+                ] },
+                { category: "Product Transformation", description: [
+                    "Users save an average of $150 per month in banking fees"
+                ] },
+                { category: "Performance Indicators", description: [
+                    "30+ point average FICO score increase",
+                    "Billions saved in overdraft fees"
+                ] }
+            ]
+        },
+        {
+            title: "Credit Building",
+            rows: [
+                { category: "JTBD", description: "When I have a thin credit file, I want to build my credit history so I can qualify for better financial products and rates." },
+                { category: "Pain Points", description: [
+                    "Can't get approved for credit cards due to low/no credit score",
+                    "Secured credit cards require large upfront deposits",
+                    "Late fees and high interest rates make credit building risky"
+                ] },
+                { category: "Pain Relievers", description: [
+                    "Credit Builder card with no credit check required",
+                    "No interest charges or annual fees",
+                    "Monthly reporting to all major credit bureaus"
+                ] },
+                { category: "Value Propositions", description: [
+                    "Build credit safely without going into debt"
+                ] },
+                { category: "Product Transformation", description: [
+                    "Average 30 point FICO increase for users"
+                ] },
+                { category: "Performance Indicators", description: [
+                    "80%+ of Credit Builder users improve credit scores"
+                ] }
+            ]
+        },
+        {
+            title: "Savings Growth",
+            rows: [
+                { category: "JTBD", description: "When I struggle to save money, I want automated tools to build my savings so I can have a financial safety net." },
+                { category: "Pain Points", description: [
+                    "Traditional savings accounts pay almost no interest",
+                    "Manual savings requires constant discipline",
+                    "Minimum balance fees eat into savings"
+                ] },
+                { category: "Pain Relievers", description: [
+                    "2.00% APY savings account with no minimums",
+                    "Automatic savings when you spend or get paid",
+                    "Round-up transactions to save spare change"
+                ]},
+                { category: "Value Propositions", description: [
+                    "Make saving money effortless"
+                ] },
+                { category: "Product Transformation", description: [
+                    "Average user saves $400 more per year"
+                ] },
+                { category: "Performance Indicators", description: [
+                    "60% of users establish first-ever emergency fund"
+                ] }
+            ]
+        }
+    ],
+    "Clerk": [
+        {
+            title: "Fast Auth Implementation",
+            rows: [
+                { category: "JTBD", description: "When building new products rapidly, we want secure authentication without delays so we can ship faster than competitors." },
+                { category: "Pain Points", description: [
+                    "Engineering teams spend months building basic auth flows",
+                    "Security/compliance requirements create massive overhead",
+                    "Custom auth solutions become tech debt requiring constant maintenance"
+                ] },
+                { category: "Pain Relievers", description: [
+                    "Drop in pre-built components for auth flows that work immediately",
+                    "Built-in security best practices and compliance certifications",
+                    "Managed service handles maintenance and updates automatically"
+                ] },
+                { category: "Value Propositions", description: [
+                    "Ship secure auth in days not months",
+                    "Enterprise-grade security for startups"
+                ] },
+                { category: "Product Transformation", description: [
+                    "Hypermode launched new product in hours vs weeks",
+                    "BaseHub eliminated auth maintenance burden completely"
+                ] },
+                { category: "Performance Indicators", description: [
+                    "10x faster implementation time",
+                    "Zero security incidents across customer base"
+                ] }
+            ]
+        },
+        {
+            title: "Enterprise Ready",
+            rows: [
+                { category: "JTBD", description: "When selling to enterprises, we want instant credibility so we can close bigger deals faster." },
+                { category: "Pain Points", description: [
+                    "Enterprise prospects require extensive security reviews",
+                    "SSO/SAML integration requests block sales cycles",
+                    "Multi-tenant access control is complex to build"
+                ] },
+                { category: "Pain Relievers", description: [
+                    "SOC2 compliance and security certifications out of box",
+                    "Pre-built SSO with all major providers",
+                    "Organization management with built-in roles/permissions"
+                ] },
+                { category: "Value Propositions", description: [
+                    "Enterprise-ready from day one",
+                    "Close enterprise deals faster"
+                ] },
+                { category: "Product Transformation", description: [
+                    "Inngest shipped MFA/SSO/SAML in fraction of normal time"
+                ] },
+                { category: "Performance Indicators", description: [
+                    "80% shorter security reviews",
+                    "3x faster enterprise deal closure"
+                ] }
+            ]
+        },
+        {
+            title: "Frictionless Onboarding",
+            rows: [
+                { category: "JTBD", description: "When users try our product, we want seamless signup flows so we can maximize conversion rates." },
+                { category: "Pain Points", description: [
+                    "High drop-off rates during complex signup flows",
+                    "Users abandon when forced to create new passwords",
+                    "Account verification adds friction to getting started"
+                ] },
+                { category: "Pain Relievers", description: [
+                    "Social login options reduce signup to one click",
+                    "Magic links eliminate password friction entirely",
+                    "Smart bot detection works invisibly in background"
+                ] },
+                { category: "Value Propositions", description: [
+                    "Maximum conversion with minimum friction",
+                    "Start using product instantly"
+                ] },
+                { category: "Product Transformation", description: [
+                    "Ping Labs saw dramatic increase in conversion after switch"
+                ] },
+                { category: "Performance Indicators", description: [
+                    "65% reduction in signup abandonment",
+                    "40% increase in conversion to active users"
+                ] }
+            ]
+        },
+        {
+            title: "B2B Growth",
+            rows: [
+                { category: "JTBD", description: "When organizations adopt our product, we want viral team expansion so we can grow accounts organically." },
+                { category: "Pain Points", description: [
+                    "Manual processes for adding team members",
+                    "No visibility into organization-wide usage",
+                    "Security concerns block adoption"
+                ] },
+                { category: "Pain Relievers", description: [
+                    "Auto-join by email domain for instant scaling",
+                    "Built-in organization management UI",
+                    "Role-based access control at org level"
+                ] },
+                { category: "Value Propositions", description: [
+                    "Teams onboard themselves",
+                    "Security teams say yes faster"
+                ] },
+                { category: "Product Transformation", description: [
+                    "Multiple customers cited rapid org-wide deployment"
+                ] },
+                { category: "Performance Indicators", description: [
+                    "4x faster team expansion",
+                    "70% reduction in IT approval time"
+                ] }
+            ]
+        }
+    ],
+  "DrumWave": [
+        {
+            title: "Privacy-First Marketing",
+            rows: [
+                { category: "JTBD", description: "When running digital marketing campaigns, we want to reach relevant audiences without violating privacy so we can maintain performance after third-party cookies go away." },
+                { category: "Pain Points", description: [
+                    "Chrome killing third-party cookies in 2024, breaking existing targeting",
+                    "Users increasingly blocking trackers and using ad blockers",
+                    "Hard to measure campaign performance across channels"
+                ] },
+                { category: "Pain Relievers", description: [
+                    "Users opt-in to share anonymized browsing data for compensation",
+                    "First-party data sharing between trusted partners",
+                    "Privacy-preserving attribution across channels"
+                ] },
+                { category: "Value Propositions", description: [
+                    "Keep ad performance without compromising privacy",
+                    "Turn privacy compliance from cost center to revenue stream"
+                ] },
+                { category: "Product Transformation", description: [
+                    "Major CPG brand maintained 94% of targeting accuracy after cookie deprecation",
+                    "Users earning average of $14/month from data sharing"
+                ] },
+                { category: "Performance Indicators", description: [
+                    "2.3x higher opt-in rate vs traditional consent popups",
+                    "88% of users continue sharing after 6 months"
+                ] }
+            ]
+        },
+        {
+            title: "Creator Data Monetization",
+            rows: [
+                { category: "JTBD", description: "When building an online following, we want to understand and monetize our audience data so we can build sustainable revenue beyond sponsorships." },
+                { category: "Pain Points", description: [
+                    "Can't access detailed follower data across multiple platforms",
+                    "Hard to prove audience value to potential sponsors",
+                    "Platform algorithms constantly changing, affecting reach"
+                ] },
+                { category: "Pain Relievers", description: [
+                    "Unified dashboard of cross-platform audience insights",
+                    "Verified audience demographics and engagement metrics",
+                    "Direct data licensing to brands through data marketplace"
+                ] },
+                { category: "Value Propositions", description: [
+                    "Own your audience data, not just your content",
+                    "Turn followers into passive income"
+                ] },
+                { category: "Product Transformation", description: [
+                    "Creator earning $2.8k/month from audience data licensing",
+                    "Brands paying 3x more for campaigns with verified audience data"
+                ] },
+                { category: "Performance Indicators", description: [
+                    "65% of mid-tier creators activated data monetization",
+                    "Average 40% increase in sponsorship rates"
+                ] }
+            ]
+        },
+        {
+            title: "Smart Loyalty Programs",
+            rows: [
+                { category: "JTBD", description: "When running a loyalty program, we want to personalize rewards based on actual customer behavior so we can increase retention without spending more." },
+                { category: "Pain Points", description: [
+                    "Customer activity data trapped in different systems",
+                    "Generic rewards don't drive meaningful engagement",
+                    "Can't measure true program ROI"
+                ] },
+                { category: "Pain Relievers", description: [
+                    "Customers choose what purchase data to share for better rewards",
+                    "AI matches rewards to individual spending patterns",
+                    "Real-time ROI tracking by customer segment"
+                ] },
+                { category: "Value Propositions", description: [
+                    "Turn loyalty from cost center to profit driver",
+                    "Give customers control over their data value"
+                ] },
+                { category: "Product Transformation", description: [
+                    "Regional coffee chain saw 2x loyalty program engagement",
+                    "Members sharing data get 40% more value from rewards"
+                ] },
+                { category: "Performance Indicators", description: [
+                    "78% of customers opt-in to data sharing",
+                    "3.1x higher retention for data-sharing members"
+                ] }
+            ]
+        }
+    ],
+    "Hubspot (Messaging)": [
+        {
+            title: "Time-Sensitive Sales",
+            rows: [
+                { category: "JTBD", description: "When a hot lead goes cold due to slow follow-up, we want to instantly engage them so we can close more deals while interest is high." },
+                { category: "Pain Points", description: [
+                    "Sales reps manually typing follow-ups waste crucial minutes after lead forms come in",
+                    "Leads going cold because email follow-ups get buried in inbox",
+                    "No way to know if prospect got your message or when they'll respond"
+                ] },
+                { category: "Pain Relievers", description: [
+                    "Auto-trigger personalized SMS within 30 seconds of form submission",
+                    "Two-way SMS chat lets reps have real conversations instantly",
+                    "Read receipts and response tracking built-in"
+                ] },
+                { category: "Value Propositions", description: [
+                    "Never miss a hot lead again",
+                    "Have real conversations while they're still on your site"
+                ] },
+                { category: "Product Transformation", description: [
+                    "Company XYZ's sales team now responds to every lead within 1 minute, similar to how Drift's chat changed B2B sales"
+                ] },
+                { category: "Performance Indicators", description: [
+                    "3.5x higher conversion rate on leads contacted within 5 minutes",
+                    "42% increase in qualified sales conversations"
+                ] }
+            ]
+        },
+        {
+            title: "Event Attendance",
+            rows: [
+                { category: "JTBD", description: "When people forget about upcoming events they registered for, we want to remind and excite them so we can maximize attendance and engagement." },
+                { category: "Pain Points", description: [
+                    "35-50% no-show rates for free webinars and events killing ROI",
+                    "Email reminders getting lost in promo/spam folders",
+                    "People registering weeks in advance then forgetting"
+                ] },
+                { category: "Pain Relievers", description: [
+                    "Automated SMS reminders with one-click confirm/decline",
+                    "Share agenda highlights and speaker bios via text",
+                    "Quick polls to gather questions before event"
+                ] },
+                { category: "Value Propositions", description: [
+                    "Fill every seat in your events",
+                    "Build excitement before they show up"
+                ] },
+                { category: "Product Transformation", description: [
+                    "SaaS company ABC cut no-show rates from 45% to 12% using SMS reminders + engagement"
+                ] },
+                { category: "Performance Indicators", description: [
+                    "73% reduction in webinar no-shows",
+                    "2.8x higher engagement scores from SMS-reminded attendees"
+                ] }
+            ]
+        },
+        {
+            title: "Customer Success",
+            rows: [
+                { category: "JTBD", description: "When customers get stuck during onboarding, we want to help them immediately so we can prevent churn in the critical first 30 days." },
+                { category: "Pain Points", description: [
+                    "Customer success teams overwhelmed with basic support questions",
+                    "Slow email back-and-forth frustrating new users",
+                    "Early warning signs of churn missed until it's too late"
+                ] },
+                { category: "Pain Relievers", description: [
+                    "Auto-detect stuck users and trigger help via SMS",
+                    "Quick video tutorials and guides sent via text",
+                    "Two-way SMS support for instant troubleshooting"
+                ] },
+                { category: "Value Propositions", description: [
+                    "Help customers succeed faster",
+                    "Fix problems before they cause churn"
+                ] },
+                { category: "Product Transformation", description: [
+                    "Startup DEF reduced time-to-value from 14 days to 4 days with SMS support"
+                ] },
+                { category: "Performance Indicators", description: [
+                    "64% faster resolution of support issues",
+                    "28% reduction in early-stage churn"
+                ] }
+            ]
+        }
+    ],
+      "Peppr": [
+        {
+            title: "Staff Training",
+            rows: [
+                { category: "JTBD", description: "When we hire new staff in a high-turnover industry, we want them productive on day 1 so we can maintain service quality without constant retraining." },
+                { category: "Pain Points", description: [
+                    "Takes 2-3 weeks to train new servers on existing complex POS systems.",
+                    "Multiple logins and interfaces confuse staff and slow down service.",
+                    "Training materials are outdated or non-existent for legacy systems."
+                ] },
+                { category: "Pain Relievers", description: [
+                    "Single interface for all restaurant operations - orders, payments, tables.",
+                    "Guided onboarding with visual cues and tooltips for new staff.",
+                    "Cloud-based training mode lets staff practice without affecting live system."
+                ] },
+                { category: "Value Propositions", description: [
+                    "Get new hires taking orders in under 2 hours.",
+                    "One system to learn instead of 4-7 different ones."
+                ] },
+                { category: "Product Transformation", description: [
+                    "Peppr customer Cha Thai got new servers productive in first shift vs 1-2 weeks previously."
+                ] },
+                { category: "Performance Indicators", description: [
+                    "85% reduction in training time for new staff.",
+                    "32% faster order-taking speed for new hires."
+                ] }
+            ]
+        },
+        {
+            title: "Menu Management",
+            rows: [
+                { category: "JTBD", description: "When making seasonal menu changes, we want to update everything at once so we can avoid order errors and customer disappointment." },
+                { category: "Pain Points", description: [
+                    "Menu updates require manual changes across multiple systems (POS, online ordering, kitchen display).",
+                    "Item availability doesn't sync in real-time, leading to canceled orders.",
+                    "Prices need manual updating in 3-4 different places."
+                ] },
+                { category: "Pain Relievers", description: [
+                    "Single menu dashboard updates all customer-facing interfaces instantly.",
+                    "Real-time inventory sync prevents orders of unavailable items.",
+                    "Bulk edit tools for seasonal menu changes."
+                ] },
+                { category: "Value Propositions", description: [
+                    "Update your entire menu in minutes, not hours.",
+                    "Never disappoint a customer with \"sorry, we're out\"."
+                ] },
+                { category: "Product Transformation", description: [
+                    "Me & Crepe reduced menu update time from 4 hours to 15 minutes."
+                ] },
+                { category: "Performance Indicators", description: [
+                    "90% fewer \"item unavailable\" notifications to customers.",
+                    "Menu changes propagate in under 30 seconds system-wide."
+                ] }
+            ]
+        },
+        {
+            title: "Real-time Financial Control",
+            rows: [
+                { category: "JTBD", description: "When running a restaurant with thin margins, we want instant visibility into costs and revenue so we can make daily operational decisions that protect profitability." },
+                { category: "Pain Points", description: [
+                    "End-of-month surprises from unexpected food costs or labor overruns.",
+                    "No real-time view of how daily decisions impact margins.",
+                    "Manual reconciliation between POS, payroll, and accounting systems takes hours."
+                ] },
+                { category: "Pain Relievers", description: [
+                    "Live dashboard showing food costs, labor costs, and revenue by hour.",
+                    "Smart alerts when metrics like labor % or food waste exceed targets.",
+                    "Automated daily P&L that combines sales, labor, and inventory data."
+                ] },
+                { category: "Value Propositions", description: [
+                    "Stop financial surprises before they hurt your business.",
+                    "Make profitable decisions with real-time data, not month-old reports."
+                ] },
+                { category: "Product Transformation", description: [
+                    "Dessert Moon increased net margin by 3.2% through daily cost monitoring."
+                ] },
+                { category: "Performance Indicators", description: [
+                    "28% reduction in food waste through real-time tracking.",
+                    "Labor costs decreased 8% through better shift planning."
+                ] }
+            ]
+        }
+    ],
+      "Microsoft Defender for Cloud Apps": [
+        {
+            title: "Shadow IT Control",
+            rows: [
+                { category: "JTBD", description: "When employees use unauthorized SaaS apps, we want to automatically discover and assess their risk so we can protect company data while enabling productivity." },
+                { category: "Pain Points", description: [
+                    "Teams bypass IT to use productivity apps they need, creating security blind spots",
+                    "Security teams waste time manually reviewing and blocking suspicious apps",
+                    "No visibility into sensitive data being shared across cloud apps"
+                ] },
+                { category: "Pain Relievers", description: [
+                    "Automatically detect new cloud apps used across the organization",
+                    "Risk-score apps based on certifications, security controls, and data handling",
+                    "Apply granular policies like \"allow read-only access\" or \"block file uploads\""
+                ] },
+                { category: "Value Propositions", description: [
+                    "Know exactly which cloud apps put you at risk",
+                    "Stop shadow IT without blocking innovation"
+                ] },
+                { category: "Product Transformation", description: [
+                    "Major bank reduced unauthorized app usage by 60% while increasing allowed apps by 40%",
+                    "IT team cut app review time from 2 weeks to 2 days"
+                ] },
+                { category: "Performance Indicators", description: [
+                    "85% reduction in high-risk app usage",
+                    "70% decrease in shadow IT incidents"
+                ] }
+            ]
+        },
+        {
+            title: "Data Protection",
+            rows: [
+                { category: "JTBD", description: "When sensitive data moves between cloud apps, we want to automatically detect and protect it so we can prevent breaches and maintain compliance." },
+                { category: "Pain Points", description: [
+                    "Can't track sensitive data once it leaves managed apps",
+                    "Manual data classification is time-consuming and error-prone",
+                    "Growing compliance fines for data exposure ($20M+ for GDPR)"
+                ] },
+                { category: "Pain Relievers", description: [
+                    "ML auto-classifies sensitive data like PII, source code, financials",
+                    "Real-time DLP policies prevent unauthorized sharing/downloads",
+                    "Create audit trails of all sensitive data access and movement"
+                ] },
+                { category: "Value Propositions", description: [
+                    "Stop data leaks before they happen",
+                    "Prove compliance with automated reporting"
+                ] },
+                { category: "Product Transformation", description: [
+                    "Healthcare provider achieved HIPAA compliance across 200+ cloud apps",
+                    "Reduced false positive DLP alerts by 80% using ML classification"
+                ] },
+                { category: "Performance Indicators", description: [
+                    "99.9% accuracy in sensitive data detection",
+                    "90% reduction in compliance audit preparation time"
+                ] }
+            ]
+        },
+        {
+            title: "Threat Detection",
+            rows: [
+                { category: "JTBD", description: "When attackers target cloud apps, we want to quickly detect and respond to threats so we can prevent account takeovers and data theft." },
+                { category: "Pain Points", description: [
+                    "Traditional security tools blind to cloud app attacks",
+                    "Multiple disconnected security tools create alert fatigue",
+                    "Hard to identify legit vs malicious cloud app activity"
+                ] },
+                { category: "Pain Relievers", description: [
+                    "Use ML to baseline normal app usage patterns",
+                    "Detect anomalies like impossible travel, mass downloads",
+                    "Auto-remediate by requiring MFA or isolating compromised accounts"
+                ] },
+                { category: "Value Propositions", description: [
+                    "Stop cloud attacks automatically",
+                    "Cut through the noise to find real threats"
+                ] },
+                { category: "Product Transformation", description: [
+                    "Retail company blocked credential stuffing attack targeting 50k accounts",
+                    "SOC team reduced mean time to detect from 3 days to 30 minutes"
+                ] },
+                { category: "Performance Indicators", description: [
+                    "95% reduction in compromised accounts",
+                    "80% fewer false positive security alerts"
+                ] }
+            ]
+        },
+        {
+            title: "App Security",
+            rows: [
+                { category: "JTBD", description: "When configuring cloud apps, we want to automatically check security settings so we can prevent misconfigurations that create vulnerabilities." },
+                { category: "Pain Points", description: [
+                    "Complex app security settings easy to misconfigure",
+                    "No visibility into risky 3rd party app integrations",
+                    "Configuration changes can create unexpected vulnerabilities"
+                ] },
+                { category: "Pain Relievers", description: [
+                    "Continuously assess app security against best practices",
+                    "Alert on risky settings like public file sharing",
+                    "Recommend security improvements with 1-click fixes"
+                ] },
+                { category: "Value Propositions", description: [
+                    "Find and fix cloud app vulnerabilities",
+                    "Stay ahead of security drift"
+                ] },
+                { category: "Product Transformation", description: [
+                    "Tech company remediated 1000+ misconfigs across O365 tenant",
+                    "Reduced critical app vulnerabilities by 85% in first 30 days"
+                ] },
+                { category: "Performance Indicators", description: [
+                    "90% of high-risk misconfigs auto-remediated",
+                    "75% reduction in time to secure new cloud apps"
+                ] }
+            ]
+        },
+        {
+            title: "3rd Party Risk",
+            rows: [
+                { category: "JTBD", description: "When employees connect external apps, we want to control OAuth permissions so we can prevent data access by malicious apps." },
+                { category: "Pain Points", description: [
+                    "Employees grant excessive permissions to 3rd party apps",
+                    "No way to audit or revoke dangerous app connections",
+                    "Growing attacks via malicious OAuth apps"
+                ] },
+                { category: "Pain Relievers", description: [
+                    "Discover and assess risk of connected OAuth apps",
+                    "Create allow/block lists based on required permissions",
+                    "Automatically revoke suspicious app connections"
+                ] },
+                { category: "Value Propositions", description: [
+                    "Control 3rd party app access",
+                    "Stop OAuth-based attacks"
+                ] },
+                { category: "Product Transformation", description: [
+                    "Financial firm blocked malicious apps targeting MS Teams",
+                    "Reduced high-risk OAuth grants by 92% in 60 days"
+                ] },
+                { category: "Performance Indicators", description: [
+                    "99% reduction in data exposure via OAuth apps",
+                    "85% fewer compromised accounts from malicious apps"
+                ] }
+            ]
+        }
+    ],
+      "Procure": [
+        {
+            title: "Site Safety",
+            rows: [
+                { category: "JTBD", description: "When safety incidents occur on construction sites, we want to immediately capture, report and analyze them so we can prevent future accidents and maintain compliance." },
+                { category: "Pain Points", description: [
+                    "Site managers spending 2+ hours daily manually filling out safety forms and incident reports.",
+                    "Critical safety information stays siloed in paper forms or separate systems.",
+                    "No way to identify patterns in safety incidents across multiple projects."
+                ] },
+                { category: "Pain Relievers", description: [
+                    "Mobile app for instant incident reporting with photo/video capture and voice-to-text.",
+                    "AI analysis of incident reports to identify common hazards and suggest preventive measures.",
+                    "Real-time safety alerts pushed to all relevant team members."
+                ] },
+                { category: "Value Propositions", description: [
+                    "Reduce time spent on safety paperwork by 75%.",
+                    "Prevent accidents before they happen."
+                ] },
+                { category: "Product Transformation", description: [
+                    "Site managers now document incidents in under 5 minutes vs 2 hours previously.",
+                    "Machine learning identified that 40% of incidents happened during specific weather conditions."
+                ] },
+                { category: "Performance Indicators", description: [
+                    "63% reduction in recordable incidents after 6 months.",
+                    "98% compliance with safety reporting requirements vs 71% before."
+                ] }
+            ]
+        },
+        {
+            title: "Resource Planning",
+            rows: [
+                { category: "JTBD", description: "When managing multiple construction projects, we want to accurately forecast labor and equipment needs so we can optimize resource allocation and prevent delays." },
+                { category: "Pain Points", description: [
+                    "Project delays due to equipment showing up late or being double-booked.",
+                    "No visibility into resource availability across different job sites.",
+                    "Manual coordination between project managers wastes hours daily."
+                ] },
+                { category: "Pain Relievers", description: [
+                    "Real-time equipment tracking and scheduling across all projects.",
+                    "AI-powered forecasting of resource needs based on project timelines.",
+                    "Mobile push notifications for resource conflicts or scheduling changes."
+                ] },
+                { category: "Value Propositions", description: [
+                    "Never miss a deadline due to resource conflicts.",
+                    "Optimize equipment utilization across projects."
+                ] },
+                { category: "Product Transformation", description: [
+                    "Equipment utilization increased from 65% to 89% after implementation.",
+                    "Reduced resource-related delays from 8 days per project to under 2."
+                ] },
+                { category: "Performance Indicators", description: [
+                    "15% reduction in equipment rental costs.",
+                    "37% decrease in idle equipment time."
+                ] }
+            ]
+        },
+        {
+            title: "Change Orders",
+            rows: [
+                { category: "JTBD", description: "When scope changes occur mid-project, we want to quickly process and approve change orders so we can maintain project momentum and protect margins." },
+                { category: "Pain Points", description: [
+                    "Change orders taking weeks to get approved, causing work stoppages.",
+                    "Missing documentation leads to disputed charges and write-offs.",
+                    "No standardized process across projects creates confusion."
+                ] },
+                { category: "Pain Relievers", description: [
+                    "Digital change order workflow with mobile approvals.",
+                    "Automated documentation collection including photos and time stamps.",
+                    "Integration with cost tracking and billing systems."
+                ] },
+                { category: "Value Propositions", description: [
+                    "Get change orders approved in hours instead of weeks.",
+                    "Never lose money on undocumented work again."
+                ] },
+                { category: "Product Transformation", description: [
+                    "Change order approval time reduced from 12 days to 36 hours.",
+                    "Dispute rate on change orders dropped from 23% to 4%."
+                ] },
+                { category: "Performance Indicators", description: [
+                    "91% of change orders now approved within 48 hours.",
+                    "$840k average annual savings per project on previously disputed work."
+                ] }
+            ]
+        }
+    ],
+      "Scribd": [
+        {
+            title: "Academic Research",
+            rows: [
+                { category: "JTBD", description: "When working on academic papers or coursework, we want to find relevant research and study materials so we can complete assignments effectively." },
+                { category: "Pain Points", description: [
+                    "University database access is expensive and limited",
+                    "Need supplementary materials beyond course textbooks",
+                    "Hard to find specific academic papers and research"
+                ] },
+                { category: "Pain Relievers", description: [
+                    "Access to millions of academic papers and research documents",
+                    "Comprehensive study guides and test prep materials",
+                    "Downloadable content for offline study"
+                ] },
+                { category: "Value Propositions", description: [
+                    "All your research materials in one place",
+                    "Save money on expensive academic subscriptions"
+                ] },
+                { category: "Product Transformation", description: [
+                    "Students completing research papers using peer-reviewed sources",
+                    "Study groups sharing notes and materials"
+                ] },
+                { category: "Performance Indicators", description: [
+                    "Average user accesses 15+ documents per research project",
+                    "84% of student users report better grades"
+                ] }
+            ]
+        },
+        {
+            title: "Legal Research",
+            rows: [
+                { category: "JTBD", description: "When handling legal cases or contracts, we want precedent documents and templates so we can work efficiently without starting from scratch." },
+                { category: "Pain Points", description: [
+                    "Legal templates and documents are expensive",
+                    "Need to reference similar cases and agreements",
+                    "Contract templates aren't customizable"
+                ] },
+                { category: "Pain Relievers", description: [
+                    "Large library of legal documents and templates",
+                    "Searchable database of contracts and agreements",
+                    "Downloadable and editable formats"
+                ] },
+                { category: "Value Propositions", description: [
+                    "Find and customize legal documents instantly",
+                    "Learn from real-world legal examples"
+                ] },
+                { category: "Product Transformation", description: [
+                    "Small law firms using document sets for research",
+                    "Solo practitioners saving time on document prep"
+                ] },
+                { category: "Performance Indicators", description: [
+                    "Users find relevant legal docs in under 5 minutes",
+                    "70% reduction in document preparation time"
+                ] }
+            ]
+        },
+        {
+            title: "Career Development",
+            rows: [
+                { category: "JTBD", description: "When preparing for professional exams or certifications, we want comprehensive study materials so we can pass our tests." },
+                { category: "Pain Points", description: [
+                    "Test prep materials are expensive",
+                    "Practice materials don't match real exams",
+                    "Need variety of study approaches"
+                ] },
+                { category: "Pain Relievers", description: [
+                    "Complete test prep document collections",
+                    "Practice exams and study guides",
+                    "Multiple prep approaches for different learning styles"
+                ] },
+                { category: "Value Propositions", description: [
+                    "All your exam prep in one subscription",
+                    "Learn from others who passed"
+                ] },
+                { category: "Product Transformation", description: [
+                    "Candidates passing professional certifications first try",
+                    "Career changers succeeding in new fields"
+                ] },
+                { category: "Performance Indicators", description: [
+                    "77% pass rate for certification exams",
+                    "Users save avg $300 on test prep materials"
+                ] }
+            ]
+        },
+        {
+            title: "Educational Support",
+            rows: [
+                { category: "JTBD", description: "When teaching courses or training others, we want ready-made educational materials so we can create effective learning experiences." },
+                { category: "Pain Points", description: [
+                    "Creating teaching materials takes too much time",
+                    "Hard to find age-appropriate content",
+                    "Need varied materials for different subjects"
+                ] },
+                { category: "Pain Relievers", description: [
+                    "Pre-made lesson plans and worksheets",
+                    "Materials organized by grade level",
+                    "Cross-subject teaching resources"
+                ] },
+                { category: "Value Propositions", description: [
+                    "Teach confidently with proven materials",
+                    "Save hours on lesson planning"
+                ] },
+                { category: "Product Transformation", description: [
+                    "Teachers building full curriculum from resources",
+                    "Tutors customizing materials for students"
+                ] },
+                { category: "Performance Indicators", description: [
+                    "Average 5 hours saved per week on prep",
+                    "88% of educators report better student engagement"
+                ] }
+            ]
+        }
+    ],
+    "Sword Health": [
+        {
+            title: "Reducing Costly MSK Procedures",
+            rows: [
+                { category: "JTBD", description: "When employees are at risk of expensive and unnecessary MSK surgeries, we want to avoid those costly procedures so we can reduce healthcare spending and improve health outcomes." },
+                { category: "Pain Points", description: [
+                    "High rates of avoidable, costly MSK surgeries that drive up healthcare costs",
+                    "Poor utilization and outcomes from traditional physical therapy",
+                    "Difficulty identifying high-risk employees before surgery stage"
+                ] },
+                { category: "Pain Relievers", description: [
+                    "AI-powered 'Predict' solution identifies high-risk members",
+                    "Personalized digital physical therapy through 'Thrive' program",
+                    "Delivers 50% reduction in surgery rates vs traditional care"
+                ] },
+                { category: "Value Propositions", description: [
+                    "Avoid costly, unnecessary MSK surgeries",
+                    "Improve employee health and productivity",
+                    "Leverage data-driven insights for proactive care"
+                ] },
+                { category: "Product Transformation", description: [
+                    "$3,177 annual savings per employee",
+                    "50% reduction in MSK surgeries vs control groups"
+                ] },
+                { category: "Performance Indicators", description: [
+                    "3.2x return on investment",
+                    "50% reduction in surgeries",
+                    "$708 million in total healthcare savings"
+                ] }
+            ]
+        },
+        {
+            title: "Expanding Access to Specialized Pelvic Health Care",
+            rows: [
+                { category: "JTBD", description: "When female employees struggle with pelvic health issues, we want to provide convenient access to high-quality, specialized care so we can improve their quality of life and productivity." },
+                { category: "Pain Points", description: [
+                    "Limited access to pelvic health specialists, especially in non-urban areas",
+                    "Lack of awareness and stigma around pelvic health conditions",
+                    "Difficulty integrating pelvic health benefits into existing healthcare plans"
+                ] },
+                { category: "Pain Relievers", description: [
+                    "Virtual pelvic health therapy through 'Bloom' solution",
+                    "Educational resources to destigmatize pelvic health",
+                    "Seamless integration with existing health benefits"
+                ] },
+                { category: "Value Propositions", description: [
+                    "Expand access to specialized pelvic health care",
+                    "Improve quality of life and productivity",
+                    "Offer comprehensive, integrated solution"
+                ] },
+                { category: "Product Transformation", description: [
+                    "64% reduction in depression from pelvic health conditions",
+                    "68% improvement in productivity vs traditional care"
+                ] },
+                { category: "Performance Indicators", description: [
+                    "83 Net Promoter Score",
+                    "64% reduction in depression",
+                    "68% productivity improvement"
+                ] }
+            ]
+        },
+        {
+            title: "Improving Access to Quality Physical Therapy",
+            rows: [
+                { category: "JTBD", description: "When employees need physical therapy for musculoskeletal issues, we want to make it easy for them to access high-quality, personalized care so we can improve their health, reduce lost productivity, and avoid costly interventions." },
+                { category: "Pain Points", description: [
+                    "Difficulty accessing in-person physical therapy",
+                    "Poor engagement and outcomes from traditional programs",
+                    "Lack of flexibility and personalization"
+                ] },
+                { category: "Pain Relievers", description: [
+                    "1-on-1 virtual physical therapy with licensed DPTs",
+                    "AI-powered real-time feedback and personalization",
+                    "On-demand access eliminating scheduling conflicts"
+                ] },
+                { category: "Value Propositions", description: [
+                    "Make high-quality physical therapy more accessible",
+                    "Improve engagement through personalized care",
+                    "Reduce lost productivity and downstream costs"
+                ] },
+                { category: "Product Transformation", description: [
+                    "67% of members pain-free after program completion",
+                    "68% improvement in employee productivity"
+                ] },
+                { category: "Performance Indicators", description: [
+                    "67% of members become pain-free",
+                    "68% productivity improvement",
+                    "83 Net Promoter Score"
+                ] }
+            ]
+        }
+    ]
+};
+
+// Helper function to create table cells
+function createCell(content) {
+    const cell = document.createElement(content.isHeader ? 'th' : 'td');
+    const span = document.createElement('span');
+    
+    if (Array.isArray(content.text)) {
+        const ul = document.createElement('ul');
+        ul.className = 'bullet-list';
+        content.text.forEach(item => {
+            const li = document.createElement('li');
+            li.textContent = item;
+            ul.appendChild(li);
+        });
+        span.appendChild(ul);
+    } else {
+        span.textContent = content.text;
+    }
+    
+    cell.appendChild(span);
+    return cell;
+}
+
+// Helper function to create table rows
+function createRow(category, description) {
+    const tr = document.createElement('tr');
+    tr.appendChild(createCell({ text: category, isHeader: true }));
+    tr.appendChild(createCell({ text: description, isHeader: false }));
+    return tr;
+}
+
+// Function to create company section
+function createCompanySection(companyName, cards) {
+    const section = document.createElement('section');
+    section.className = 'company-section';
+    
+    const companyHeader = document.createElement('h2');
+    companyHeader.className = 'company-header';
+    companyHeader.textContent = companyName;
+    section.appendChild(companyHeader);
+    
+    const cardsContainer = document.createElement('div');
+    cardsContainer.className = 'card-grid';
+    cards.forEach(cardData => {
+        cardsContainer.appendChild(createCard(cardData, companyName));
+    });
+    section.appendChild(cardsContainer);
+    
+    return section;
+}
+
+// Function to create a card
+function createCard(data, companyName) {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-expanded', 'false');
+    card.setAttribute('data-company', companyName);
+    card.setAttribute('aria-label', `${data.title} - Click to expand`);
+
+    const title = document.createElement('h3');
+    title.textContent = data.title;
+    
+    const table = document.createElement('table');
+    const tbody = document.createElement('tbody');
+
+    data.rows.forEach(row => {
+        const tr = createRow(row.category, row.description);
+        tbody.appendChild(tr);
+    });
+
+    table.appendChild(tbody);
+    card.appendChild(title);
+    card.appendChild(table);
+
+    const expandIndicator = document.createElement('span');
+    expandIndicator.className = 'expand-indicator';
+    expandIndicator.textContent = '▼';
+    expandIndicator.setAttribute('aria-hidden', 'true');
+    card.appendChild(expandIndicator);
+
+    function toggleCard() {
+    const wasExpanded = card.classList.contains('expanded');
+    
+    // Close all other cards within the same company section
+    const parentSection = card.closest('.company-section');
+    parentSection.querySelectorAll('.card').forEach(c => {
+        if (c !== card) {
+            c.classList.remove('expanded');
+            c.setAttribute('aria-expanded', 'false');
+        }
+    });
+    
+    // Toggle current card
+    card.classList.toggle('expanded', !wasExpanded);
+    card.setAttribute('aria-expanded', !wasExpanded);
+    
+    card.setAttribute('aria-label', 
+        `${data.title} - Click to ${wasExpanded ? 'expand' : 'collapse'}`
+    );
+}
+
+    // Add event listeners
+    card.addEventListener('click', toggleCard);
+    card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggleCard();
+        }
+    });
+
+    return card;
+}
+
+// Function to filter cards based on search
+// Modified filterCards function
+function filterCards(searchTerm) {
+    const grid = document.getElementById('cardGrid');
+    const selectedCompany = document.querySelector('.company-filter').value;
+    grid.innerHTML = '';
+    searchTerm = searchTerm.toLowerCase();
+
+    // If a company is selected, only search within that company
+    if (selectedCompany) {
+        const companyCards = companyData[selectedCompany];
+        const filteredCards = companyCards.filter(card => 
+            card.title.toLowerCase().includes(searchTerm) ||
+            card.rows.some(row => 
+                row.category.toLowerCase().includes(searchTerm) ||
+                (Array.isArray(row.description) ? 
+                    row.description.some(desc => desc.toLowerCase().includes(searchTerm)) :
+                    row.description.toLowerCase().includes(searchTerm))
+            )
+        );
+
+        if (filteredCards.length > 0) {
+            grid.appendChild(createCompanySection(selectedCompany, filteredCards));
+        }
+        return;
+    }
+
+    // If no company is selected, search across all companies
+    const sortedCompanies = Object.keys(companyData).sort();
+    sortedCompanies.forEach(companyName => {
+        const companyCards = companyData[companyName];
+        const filteredCards = companyCards.filter(card => 
+            companyName.toLowerCase().includes(searchTerm) ||
+            card.title.toLowerCase().includes(searchTerm) ||
+            card.rows.some(row => 
+                row.category.toLowerCase().includes(searchTerm) ||
+                (Array.isArray(row.description) ? 
+                    row.description.some(desc => desc.toLowerCase().includes(searchTerm)) :
+                    row.description.toLowerCase().includes(searchTerm))
+            )
+        );
+
+        if (filteredCards.length > 0) {
+            grid.appendChild(createCompanySection(companyName, filteredCards));
+        }
+    });
+}
+
+// Function to render all cards
+function renderCards() {
+    const grid = document.getElementById('cardGrid');
+    grid.innerHTML = '';
+    
+    // Sort companies alphabetically
+    const sortedCompanies = Object.keys(companyData).sort((a, b) => 
+    a.toLowerCase().localeCompare(b.toLowerCase())
+);
+    
+    sortedCompanies.forEach(companyName => {
+        grid.appendChild(createCompanySection(companyName, companyData[companyName]));
+    });
+}
+
+// Add company filter function
+function filterByCompany(companyName) {
+    const grid = document.getElementById('cardGrid');
+    grid.innerHTML = '';
+    
+    if (!companyName) {
+        // If no company selected (All Companies), render all
+        renderCards();
+        return;
+    }
+
+    // Render only the selected company's cards
+    if (companyData[companyName]) {
+        grid.appendChild(createCompanySection(companyName, companyData[companyName]));
+    }
+}
+
+// Update event listeners
+document.querySelector('.search').addEventListener('input', (e) => filterCards(e.target.value));
+document.querySelector('.company-filter').addEventListener('change', (e) => filterByCompany(e.target.value));
+
+// Initial render
+renderCards();
+    </script>
+</body>
+</html>
